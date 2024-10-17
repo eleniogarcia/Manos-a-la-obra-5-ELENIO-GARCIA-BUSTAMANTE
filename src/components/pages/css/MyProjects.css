@@ -1,4 +1,48 @@
-.my-projects-page {
-    padding: 20px;
-  }
-  
+/* MyProjects.css */
+
+.my-projects-container {
+  padding: 20px;
+  background-color: #f4f4f9;
+  border-radius: 8px;
+  max-width: 1200px; /* Limitar el ancho máximo para mejorar la legibilidad */
+  margin: 0 auto; /* Centrar el contenedor */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Agregar sombra al contenedor */
+}
+
+h1 {
+  font-size: 32px; /* Título más grande */
+  color: #333;
+  text-align: center; /* Centrar el título */
+  margin-bottom: 20px; /* Espacio inferior del título */
+}
+
+.project-list {
+  list-style: none;
+  padding: 0;
+}
+
+.project-item {
+  background-color: #fff;
+  margin: 10px 0;
+  padding: 20px; /* Aumentar el padding para más espacio interno */
+  border-radius: 8px; /* Esquinas redondeadas */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s; /* Agregar transición suave */
+}
+
+.project-item:hover {
+  transform: translateY(-2px); /* Elevar ligeramente al pasar el ratón */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Sombra más fuerte al hacer hover */
+}
+
+.project-item h3 {
+  margin: 0;
+  font-size: 24px; /* Aumentar tamaño del texto del nombre del proyecto */
+  color: #007bff; /* Cambiar color a un azul atractivo */
+}
+
+.project-item p {
+  margin: 5px 0;
+  color: #666; /* Texto gris para mejor legibilidad */
+  line-height: 1.5; /* Aumentar espacio entre líneas */
+}

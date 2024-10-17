@@ -10,9 +10,9 @@ const ProjectList = ({ projects, onClickProject }) => {
       ) : (
         projects.map(project => (
           <ProjectCard
-            key={project.id}
+            key={project._id} // Usa _id si es necesario, o project.id
             project={project}
-            onClick={() => onClickProject(project.id)}
+            onClick={() => onClickProject(project._id)} // Asegúrate de usar el ID correcto
           />
         ))
       )}
