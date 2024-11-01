@@ -1,6 +1,7 @@
 /* Estilo para la página de detalles de la epic */
 .epic-details-page {
   max-width: 800px;
+  margin-top: 10%;
   margin: 0 auto; /* Centra el contenido */
   padding: 20px;
   background-color: #f9f9f9; /* Color de fondo claro */

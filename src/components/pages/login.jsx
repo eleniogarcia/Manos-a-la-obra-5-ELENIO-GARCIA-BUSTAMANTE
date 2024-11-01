@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Header from '../organism/Header';
 
 export default function Login() {
   const [username, setUsername] = useState('');
@@ -46,8 +47,10 @@ export default function Login() {
 
   return (
     <div>
-      <h1>LOGIN</h1>
-      <p>Please enter your login and password</p>
+      <Header title="LOGIN" /> {/* Aquí se pasa el título al Header */}
+        <h1>Login</h1>
+        <h1>----------------------------------</h1>
+      <p>Porfavor, Ingresa usuario y contraseña</p>
       <form onSubmit={(e)=>handleSubmit(e)}>
         <div>
           <input

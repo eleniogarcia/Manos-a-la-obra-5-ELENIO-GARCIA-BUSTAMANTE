@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import Layout from '../organism/Layout';
+import Header from '../organism/Header';
 import Loader from '../atoms/Loader';
 import './css/EpicDetail.css';
 
@@ -32,8 +32,9 @@ const EpicDetail = () => {
         
         const epicData = await epicResponse.json();
         setEpic(epicData.data);
+        console.log("aca imprimico el epic" ,epicData.data);
 
-        const storiesResponse = await fetch(`https://lamansysfaketaskmanagerapi.onrender.com/api/stories?epic=${epicId}`, {
+        const storiesResponse = await fetch(`https://lamansysfaketaskmanagerapi.onrender.com/api/epics/${epicId}/stories`, {
           method: 'GET',
           headers: {
             'auth': token,
@@ -54,42 +55,41 @@ const EpicDetail = () => {
   }, [epicId]);
 
   return (
-    <Layout title={`Epic Details: ${epic ? epic.name : 'Loading...'}`}>
-      <div className="epic-details-page">
-        {loading ? (
-          <Loader />
-        ) : error ? (
-          <p style={{ color: 'red' }}>{error}</p>
-        ) : (
-          <div>
-            {epic ? (
-              <div>
-                <h2>{epic.name}</h2>
-                <p>{epic.description}</p>
-                <h3>Stories:</h3>
-                <div className="story-grid">
-                  {stories.length > 0 ? (
-                    stories.map((story) => (
-                      <div className="story-card" key={story._id}>
-                        <h4>{story.name}</h4>
-                        <p>{story.description}</p>
-                        <p>Points: {story.points}</p>
-                        <p>Status: {story.status}</p>
-                        <Link to={`/my-projects/${projectId}/epics/${epicId}/story/${story._id}`}>Ver Detalles de la Historia</Link>
-                      </div>
-                    ))
-                  ) : (
-                    <p>No hay stories disponibles para esta epic.</p>
-                  )}
-                </div>
+    <div className="epic-details-page">
+      {loading ? (
+        <Loader />
+      ) : error ? (
+        <p style={{ color: 'red' }}>{error}</p>
+      ) : (
+        <div>
+          {epic ? (
+            <>
+              <Header title={epic.name} /> {/* Solo se ejecuta si epic no es null */}
+              
+              
+              <h3>Stories:</h3>
+              <div className="story-grid">
+                {stories.length > 0 ? (
+                  stories.map((story) => (
+                    <div className="story-card" key={story._id}>
+                      <h4>{story.name}</h4>
+                      <p>{story.description}</p>
+                      <p>Points: {story.points}</p>
+                      <p>Status: {story.status}</p>
+                      <Link to={`/my-projects/${projectId}/epics/${epicId}/story/${story._id}`}>Ver Detalles de la Historia</Link>
+                    </div>
+                  ))
+                ) : (
+                  <p>No hay stories disponibles para esta epic.</p>
+                )}
               </div>
-            ) : (
-              <p>No se encontró la epic.</p>
-            )}
-          </div>
-        )}
-      </div>
-    </Layout>
+            </>
+          ) : (
+            <p>No se encontró la epic.</p>
+          )}
+        </div>
+      )}
+    </div>
   );
 };
 

@@ -1,63 +1,73 @@
-import React, { useState } from 'react';
-import './css/AddTaskModal.css'; // Estilos para el modal
+import React, { useState } from 'react'; 
+import './css/AddTaskModal.css';
 
 const AddTaskModal = ({ isOpen, onClose, onAddTask, storyId }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [due, setDue] = useState(''); // Para la fecha de vencimiento
+  const [due, setDue] = useState('');
+  const [done, setDone] = useState(false); // Estado para "done"
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [notification, setNotification] = useState(''); // Para el mensaje de éxito/error
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
+    setNotification(''); // Resetear mensaje de notificación
 
     // Validaciones
     if (!name) {
-      setError('El nombre es obligatorio.');
+      setNotification('El nombre es obligatorio.');
       setLoading(false);
       return;
     }
     if (description && description.length < 10) {
-      setError('La descripción debe tener al menos 10 caracteres.');
+      setNotification('La descripción debe tener al menos 10 caracteres.');
       setLoading(false);
       return;
     }
 
     const taskData = {
-      done: false,
+      done, // Estado de la tarea
       name,
       description,
-      story: storyId, // Asegúrate de pasar `storyId` desde el componente padre
-      created: new Date().toISOString(), // Fecha de creación
-      due, // La fecha de vencimiento que el usuario proporcione
+      story: storyId,
+      created: new Date().toISOString(),
+      due,
     };
 
-    try {
-      const token = localStorage.getItem('token');
-      const response = await fetch("https://lamansysfaketaskmanagerapi.onrender.com/api/tasks", {
-        method: 'POST',
-        headers: {
-          'auth': token,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(taskData),
+    const token = localStorage.getItem('token');
+
+    fetch("https://lamansysfaketaskmanagerapi.onrender.com/api/tasks", {
+      method: 'POST',
+      headers: {
+        'auth': token, // Autenticación
+        'Content-Type': 'application/json', // Cabecera de tipo JSON
+      },
+      body: JSON.stringify(taskData), // Cuerpo de la petición
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('Response from server:', data); // Mostrar la respuesta completa en la consola
+        
+        // Verificación del campo "status"
+        if (data.status !== 'success') {
+          throw new Error(data.message || 'Error al agregar la tarea.'); // Lanzar error si no es exitoso
+        }
+
+        onAddTask(data.data); // Agregar la nueva tarea a la lista
+        setNotification('¡Tarea creada exitosamente!'); // Mensaje de éxito
+        setTimeout(() => {
+          onClose(); // Cerrar el modal después de un breve período
+          setNotification(''); // Limpiar el mensaje de notificación
+        }, 1500); // 1.5 segundos de retraso antes de cerrar
+      })
+      .catch((error) => {
+        console.error('Error details:', error); // Mostrar detalles del error en la consola
+        setNotification(`Error del servidor: ${error.message || 'Error desconocido al agregar la tarea.'}`); // Mostrar el error real
+      })
+      .finally(() => {
+        setLoading(false);
       });
-
-      const data = await response.json(); // Procesamos la respuesta
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Error al agregar la tarea.'); // Cambiamos a data.message
-      }
-
-      onAddTask(data); // Llama a la función para agregar la tarea a la lista en el componente padre
-      onClose(); // Cierra el diálogo
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setLoading(false);
-    }
   };
 
   return (
@@ -80,7 +90,7 @@ const AddTaskModal = ({ isOpen, onClose, onAddTask, storyId }) => {
               <textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                minLength={10} // Solo si se provee
+                minLength={10}
               />
             </div>
             <div>
@@ -91,7 +101,16 @@ const AddTaskModal = ({ isOpen, onClose, onAddTask, storyId }) => {
                 onChange={(e) => setDue(e.target.value)}
               />
             </div>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+            <div>
+              <label>Estado de la tarea</label>
+              <input
+                type="checkbox"
+                checked={done}
+                onChange={(e) => setDone(e.target.checked)}
+              />
+              <span>{done ? 'Completada' : 'Incompleta'}</span>
+            </div>
+            {notification && <p style={{ color: notification.includes('exitosamente') ? 'green' : 'red' }}>{notification}</p>}
             <button type="submit" disabled={loading}>
               {loading ? 'Creando...' : 'Agregar'}
             </button>

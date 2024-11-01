@@ -1,11 +1,10 @@
 // src/components/pages/MyProjects.jsx
 import React, { useState, useEffect } from 'react';
-import Layout from '../organism/Layout';
+import Header from '../organism/Header';
 import ProjectList from '../molecules/ProjectList';
 import Loader from '../atoms/Loader';
 import './css/MyProjects.css';
 import { useNavigate } from 'react-router-dom';
-
 
 
 const MyProjects = () => {
@@ -56,8 +55,10 @@ const MyProjects = () => {
   
 
   return (
-    <Layout title="My Projects">
+    
       <div className="my-projects-page">
+        <Header title="My Projects" />
+        <h1>.</h1>
         {loading ? (
           <Loader />
         ) : error ? (
@@ -65,8 +66,9 @@ const MyProjects = () => {
         ) : (
           <ProjectList projects={projects} onClickProject={handleProjectClick} />
         )}
+        
       </div>
-    </Layout>
+   
   );
 };
 

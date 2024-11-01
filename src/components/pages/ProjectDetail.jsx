@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import './css/ProjectDetail.css';
+import Header from '../organism/Header';
 
 const ProjectDetail = () => {
   const { projectId } = useParams();
@@ -28,6 +29,7 @@ const ProjectDetail = () => {
             'Content-Type': 'application/json',
           },
         });
+       
 
         if (!response.ok) {
           throw new Error('Error al obtener el proyecto');
@@ -36,7 +38,7 @@ const ProjectDetail = () => {
         const data = await response.json();
         setProject(data.data);
 
-        const epicsResponse = await fetch(`https://lamansysfaketaskmanagerapi.onrender.com/api/epics?project=${projectId}`, {
+        const epicsResponse = await fetch(`https://lamansysfaketaskmanagerapi.onrender.com/api/projects/${projectId}/epics`, {
           method: 'GET',
           headers: {
             'auth': token,
@@ -74,7 +76,8 @@ const ProjectDetail = () => {
 
   return (
     <div className="project-detail-container">
-      <h1 className="project-detail-title">{project.name}</h1>
+    <Header title={project.name} />
+    <h1>.</h1>
       <p className="project-detail-description">{project.description}</p>
 
       <h2>Épicas del Proyecto</h2>
