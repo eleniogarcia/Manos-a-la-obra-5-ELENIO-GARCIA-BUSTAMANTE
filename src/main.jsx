@@ -4,7 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <BrowserRouter /*basename="/Manos-a-la-obra-5-ELENIO-GARCIA-BUSTAMANTE"*/>
+  <BrowserRouter >
     <App />
   </BrowserRouter>
 );
