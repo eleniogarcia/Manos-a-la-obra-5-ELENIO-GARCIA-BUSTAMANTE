@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import Header from './components/organism/Header';
 import Sidebar from './components/molecules/Sidebar';
 import Home from './components/pages/Home';
@@ -23,33 +23,26 @@ const App = () => {
   };
 
   return (
-    <Router>
-      <div className="app-container">
-        {/* Pasar toggleSidebar al Header */}
-
-      {} 
-       
-        
-        {/* Pasar isSidebarOpen y toggleSidebar al Sidebar */}
-        <Sidebar isOpen={isSidebarOpen} closeSidebar={toggleSidebar} />
-        
-        <main className="main-content">
-          <PageWrapper setTitle={setTitle}> {/* Integrar PageWrapper */}
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/home" element={<Home />} />
-              <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
-              <Route path="/settings"    element={isAuthenticated ? <SettingsPage /> : <Navigate to="/login" />}/>
-              <Route path="/my-stories" element={isAuthenticated ? <MyStories /> : <Navigate to="/login" />} /> {/* Nueva ruta */}
-              <Route path="/my-projects" element={isAuthenticated ? <MyProjects /> : <Navigate to="/login" />} />
-              <Route path="/my-projects/:projectId" element={isAuthenticated ? <ProjectDetail /> : <Navigate to="/login" />} />
-              <Route path="/my-projects/:projectId/epics/:epicId" element={isAuthenticated ? <EpicDetail /> : <Navigate to="/login" />} />
-              <Route path="/my-projects/:projectId/epics/:epicId/story/:storyId" element={isAuthenticated ? <StoryDetail /> : <Navigate to="/login" />} />
-            </Routes>
-          </PageWrapper>
-        </main>
-      </div>
-    </Router>
+    <div className="app-container">
+      <Header toggleSidebar={toggleSidebar} />
+      <Sidebar isOpen={isSidebarOpen} closeSidebar={toggleSidebar} />
+      
+      <main className="main-content">
+        <PageWrapper setTitle={setTitle}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
+            <Route path="/settings" element={isAuthenticated ? <SettingsPage /> : <Navigate to="/login" />} />
+            <Route path="/my-stories" element={isAuthenticated ? <MyStories /> : <Navigate to="/login" />} />
+            <Route path="/my-projects" element={isAuthenticated ? <MyProjects /> : <Navigate to="/login" />} />
+            <Route path="/my-projects/:projectId" element={isAuthenticated ? <ProjectDetail /> : <Navigate to="/login" />} />
+            <Route path="/my-projects/:projectId/epics/:epicId" element={isAuthenticated ? <EpicDetail /> : <Navigate to="/login" />} />
+            <Route path="/my-projects/:projectId/epics/:epicId/story/:storyId" element={isAuthenticated ? <StoryDetail /> : <Navigate to="/login" />} />
+          </Routes>
+        </PageWrapper>
+      </main>
+    </div>
   );
 };
 

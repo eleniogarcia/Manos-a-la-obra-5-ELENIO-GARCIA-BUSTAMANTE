@@ -27,6 +27,7 @@ const SettingsPage = () => {
 
   return (
     <div className="settings-page">
+      <h2>.</h2>
       <h2>Configuraciones</h2>
       
       <div className="settings-section">
