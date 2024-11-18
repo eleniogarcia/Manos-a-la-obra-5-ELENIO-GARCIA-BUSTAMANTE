@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Header from '../organism/Header';
 import Loader from '../atoms/Loader';
-import './css/EpicDetail.css';
+import 'src/components/pages/css/EpicDetail.css';
+
 
 const EpicDetail = () => {
   const { projectId, epicId } = useParams(); // Extraer projectId y epicId de la URL
