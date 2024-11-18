@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../organism/Header';
 
-export default function Login() {
+export default function Login({ setIsAuthenticated }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -13,9 +13,9 @@ export default function Login() {
     e.preventDefault();
 
     const data = {
-      "username" : "waltermolina",
-      "password": "1234"
-    }
+      username: "waltermolina",
+      password: "1234"
+    };
 
     try {
       const response = await fetch("https://lamansysfaketaskmanagerapi.onrender.com/api/login", {
@@ -24,34 +24,38 @@ export default function Login() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(data),
-      })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log('Success:', data)
-         
-        // Guarda el token en el localStorage
-        localStorage.setItem('token', data.token);
-        /*localStorage.setItem('userID', result.user._id);*/
-
       });
       
-     
+      const result = await response.json();
+      console.log('Success:', result);
 
-      // Redirige al usuario a la página de proyectos
-      navigate('/my-projects'); // Cambia esto a la ruta correcta de tus proyectos
+      if (result.token) {
+        // Guarda el token en el localStorage
+        localStorage.setItem('token', result.token);
+
+        // Actualiza el estado de autenticación
+        setIsAuthenticated(true);
+
+        // Redirige al usuario a la página de proyectos
+        navigate('/my-projects');
+      } else {
+        setError('No se pudo autenticar');
+      }
+
     } catch (error) {
       console.error('Error:', error);
-      setError(error.message);
+      setError('Error al intentar iniciar sesión');
     }
   };
 
   return (
     <div>
-      <Header title="LOGIN" /> {/* Aquí se pasa el título al Header */}
-        <h1>Login</h1>
-        <h1>----------------------------------</h1>
-      <p>Porfavor, Ingresa usuario y contraseña</p>
-      <form onSubmit={(e)=>handleSubmit(e)}>
+      <Header title="LOGIN" />
+      <h1>-----------------------</h1>
+      <h1>-----------------------</h1>
+      <h1>Login</h1>
+      <p>Por favor, ingresa usuario y contraseña</p>
+      <form onSubmit={handleSubmit}>
         <div>
           <input
             placeholder='Username'

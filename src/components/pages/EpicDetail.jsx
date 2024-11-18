@@ -65,8 +65,6 @@ const EpicDetail = () => {
           {epic ? (
             <>
               <Header title={epic.name} /> {/* Solo se ejecuta si epic no es null */}
-              
-              
               <h3>Stories:</h3>
               <div className="story-grid">
                 {stories.length > 0 ? (
