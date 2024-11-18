@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Header from '../organism/Header';
 import Loader from '../atoms/Loader';
 import AddTaskModal from '../atoms/AddTaskModal';
-import './css/StoryDetail.css';
+import './css/storyDetail.css';
 import { useParams } from 'react-router-dom';
 
 const StoryDetail = () => {
