@@ -7,7 +7,7 @@ import MyProjects from './components/pages/MyProjects';
 import ProjectDetail from './components/pages/ProjectDetail';
 import EpicDetail from './components/pages/EpicDetail';
 import StoryDetail from './components/pages/StoryDetail';
-import Login from './components/pages/Login'; 
+import Login from './components/pages/login'; 
 import PageWrapper from './components/PageWrapper'; 
 import MyStories from './components/pages/MyStories'; 
 import SettingsPage from './components/pages/SettingsPage'; 
