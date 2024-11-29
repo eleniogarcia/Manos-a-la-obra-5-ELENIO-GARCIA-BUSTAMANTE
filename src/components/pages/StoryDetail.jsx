@@ -1,17 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../organism/Header';
 import Loader from '../atoms/Loader';
-import AddTaskModal from '../atoms/AddTaskModal';
 import './css/storyDetail.css';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 
 const StoryDetail = () => {
-  const { projectId, epicId, storyId } = useParams(); // Extraer los IDs de la URL
+  const { storyId } = useParams();
   const [story, setStory] = useState(null);
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [isAddTaskModalOpen, setAddTaskModalOpen] = useState(false);
+  const [newTask, setNewTask] = useState({
+    name: '',
+    description: '',
+    dueDate: '',
+    done: false,
+  });
+  const [isAdding, setIsAdding] = useState(false);
+  const [notification, setNotification] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,10 +30,10 @@ const StoryDetail = () => {
       }
 
       try {
-        const response = await fetch(`https://lamansysfaketaskmanagerapi.onrender.com/api/stories/${storyId}`, {
+        const response = await fetch(`http://localhost:3001/stories/${storyId}`, {
           method: 'GET',
           headers: {
-            'auth': token,
+            auth: token,
             'Content-Type': 'application/json',
           },
         });
@@ -37,12 +43,12 @@ const StoryDetail = () => {
         }
 
         const storyData = await response.json();
-        setStory(storyData.data);
+        setStory(storyData);
 
-        const tasksResponse = await fetch(`https://lamansysfaketaskmanagerapi.onrender.com/api/stories/${storyId}/tasks`, {
+        const tasksResponse = await fetch(`http://localhost:3001/tasks/story/${storyId}`, {
           method: 'GET',
           headers: {
-            'auth': token,
+            auth: token,
             'Content-Type': 'application/json',
           },
         });
@@ -52,7 +58,7 @@ const StoryDetail = () => {
         }
 
         const tasksData = await tasksResponse.json();
-        setTasks(tasksData.data);
+        setTasks(tasksData);
       } catch (error) {
         setError(error.message);
       } finally {
@@ -63,32 +69,57 @@ const StoryDetail = () => {
     fetchData();
   }, [storyId]);
 
-  // Función para agregar tareas
-  const handleAddTask = async (newTaskData) => {
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setNewTask((prevTask) => ({
+      ...prevTask,
+      [name]: type === 'checkbox' ? checked : value,
+    }));
+  };
+
+  const handleAddTask = async () => {
     const token = localStorage.getItem('token');
-    setLoading(true);
+    if (!token) {
+      setNotification('No estás autenticado. Por favor inicia sesión.');
+      return;
+    }
+
+    setIsAdding(true);
+    setNotification('');
+
+    if (!newTask.name.trim()) {
+      setNotification('El nombre es obligatorio.');
+      setIsAdding(false);
+      return;
+    }
+    if (newTask.description && newTask.description.length < 10) {
+      setNotification('La descripción debe ser vacía o tener al menos 10 caracteres.');
+      setIsAdding(false);
+      return;
+    }
 
     try {
-      const response = await fetch(`https://lamansysfaketaskmanagerapi.onrender.com/api/stories/${storyId}/tasks`, {
+      const response = await fetch(`http://localhost:3001/tasks`, {
         method: 'POST',
         headers: {
-          'auth': token,
+          auth: token,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ ...newTaskData, storyId }),
+        body: JSON.stringify({ ...newTask, story: storyId, dueDate: newTask.dueDate }),
       });
 
-      const result = await response.json();
-
-      if (response.ok) {
-        setTasks((prevTasks) => [...prevTasks, result.data]);
-      } else {
-        throw new Error(result.message || 'Error al agregar la tarea');
+      if (!response.ok) {
+        throw new Error('Error al agregar la tarea');
       }
+
+      const createdTask = await response.json();
+      setTasks((prevTasks) => [createdTask, ...prevTasks]);
+      setNewTask({ name: '', description: '', dueDate: '', done: false });
+      setNotification('Tarea agregada exitosamente.');
     } catch (error) {
-      setError('Error al agregar la tarea: ' + error.message);
+      setNotification('Error al agregar la tarea: ' + error.message);
     } finally {
-      setLoading(false);
+      setIsAdding(false);
     }
   };
 
@@ -99,10 +130,10 @@ const StoryDetail = () => {
       const token = localStorage.getItem('token');
 
       try {
-        const response = await fetch(`https://lamansysfaketaskmanagerapi.onrender.com/api/tasks/${taskId}`, {
+        const response = await fetch(`http://localhost:3001/tasks/${taskId}`, {
           method: 'DELETE',
           headers: {
-            'auth': token,
+            auth: token,
           },
         });
 
@@ -110,7 +141,7 @@ const StoryDetail = () => {
           throw new Error('Error al eliminar la tarea');
         }
 
-        setTasks((prevTasks) => prevTasks.filter(task => task._id !== taskId)); // Filtra las tareas eliminadas
+        setTasks((prevTasks) => prevTasks.filter((task) => task._id !== taskId));
       } catch (error) {
         setError('Error al eliminar la tarea: ' + error.message);
       } finally {
@@ -119,49 +150,100 @@ const StoryDetail = () => {
     }
   };
 
+  const handleToggleTaskDone = async (taskId, currentDoneStatus) => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setNotification('No estás autenticado. Por favor inicia sesión.');
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://localhost:3001/tasks/${taskId}`, {
+        method: 'PATCH',
+        headers: {
+          auth: token,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ done: !currentDoneStatus }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al actualizar la tarea');
+      }
+
+      const updatedTask = await response.json();
+      setTasks((prevTasks) => prevTasks.map((task) => task._id === taskId ? updatedTask : task));
+    } catch (error) {
+      setNotification('Error al actualizar la tarea: ' + error.message);
+    }
+  };
+
+  if (loading) return <Loader />;
+
+  if (error) return <div>{error}</div>;
+
   return (
     <div className="story-details-page">
-      <Header title={story ? story.name : 'Detalles de la Historia'} />
-      {loading ? (
-        <Loader />
-      ) : error ? (
-        <p style={{ color: 'red' }}>{error}</p>
-      ) : (
-        <div>
-          {story ? (
-            <div>
-              <h1>.</h1>
-              <h2>{story.description}</h2>
-             
-              <button onClick={() => setAddTaskModalOpen(true)}>Agregar Tarea</button>
-              <AddTaskModal
-                isOpen={isAddTaskModalOpen}
-                onClose={() => setAddTaskModalOpen(false)}
-                onAddTask={handleAddTask} // Usa la nueva función para agregar la tarea
-                storyId={storyId} // Pasa el ID de la story al modal
-              />
-              <h3>Tareas:</h3>
-              {tasks.length > 0 ? (
-                <ul>
-                  {tasks.map((task) => (
-                    <li key={task._id} className="task-item">
-                      <h4>{task.name}</h4>
-                      <p>{task.description || 'Sin descripción'}</p>
-                      <p>Fecha de Vencimiento: {new Date(task.dueDate).toLocaleDateString()}</p>
-                      <p>Estado: {task.done ? 'Hecha' : 'No hecha'}</p>
-                      <button onClick={() => handleDeleteTask(task._id)}>Eliminar</button>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p>No hay tareas disponibles para esta historia.</p>
-              )}
-            </div>
-          ) : (
-            <p>No se encontró la historia.</p>
-          )}
+      <Header title={story.name} />
+      <div className="add-task-form">
+      <h2>========================================================</h2>
+          <h3>Agregar Tarea</h3>
+          <input
+            type="text"
+            name="name"
+            placeholder="Nombre de la tarea"
+            value={newTask.name}
+            onChange={handleInputChange}
+          />
+          <textarea
+            name="description"
+            placeholder="Descripción de la tarea"
+            value={newTask.description}
+            onChange={handleInputChange}
+          />
+          <input
+            type="date"
+            name="dueDate"
+            value={newTask.dueDate}
+            onChange={handleInputChange}
+          />
+          <button onClick={handleAddTask} disabled={isAdding}>
+            {isAdding ? 'Agregando...' : 'Agregar Tarea'}
+          </button>
         </div>
-      )}
+      <div className="storyContainer">
+        <p>{story.description}</p>
+        <h2>Tareas</h2>
+        {tasks.length === 0 ? (
+          <p>No hay tareas para esta historia.</p>
+        ) : (
+          <ul>
+            {tasks.map((task) => (
+              <li key={task._id} className="task-item">
+                <div>
+                  <input
+                    type="checkbox"
+                    checked={task.done}
+                    onChange={() => handleToggleTaskDone(task._id, task.done)}
+                  />
+                  <span>{task.name}</span>
+                </div>
+                <div className="task-details">
+                  <p>{task.description}</p>
+                  <p>Fecha de vencimiento: {new Date(task.dueDate).toLocaleDateString()}</p>
+                </div>
+                <div className="task-actions">
+                  <button onClick={() => handleDeleteTask(task._id)} className="delete-btn">
+                    Eliminar
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+        
+        {notification && <p className="notification">{notification}</p>}
+      </div>
     </div>
   );
 };

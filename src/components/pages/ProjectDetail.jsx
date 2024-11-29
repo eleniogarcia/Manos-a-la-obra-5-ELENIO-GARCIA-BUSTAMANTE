@@ -4,16 +4,16 @@ import './css/ProjectDetail.css';
 import Header from '../organism/Header';
 
 const ProjectDetail = () => {
-  const { projectId } = useParams();
-  const [project, setProject] = useState(null);
-  const [epics, setEpics] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const { projectId } = useParams(); // Obtener el ID del proyecto desde los parámetros de la URL
+  const [project, setProject] = useState(null); // Estado para almacenar los detalles del proyecto
+  const [epics, setEpics] = useState([]); // Estado para almacenar las épicas del proyecto
+  const [loading, setLoading] = useState(true); // Estado de carga
+  const [error, setError] = useState(''); // Estado para manejar errores
 
   useEffect(() => {
     const fetchProjectDetails = async () => {
-      setLoading(true);
-      const token = localStorage.getItem('token');
+      setLoading(true); // Activar estado de carga
+      const token = localStorage.getItem('token'); // Obtener token del localStorage
 
       if (!token) {
         setError('No estás autenticado. Por favor, inicia sesión.');
@@ -22,26 +22,27 @@ const ProjectDetail = () => {
       }
 
       try {
-        const response = await fetch(`https://lamansysfaketaskmanagerapi.onrender.com/api/projects/${projectId}`, {
+        // Petición para obtener los detalles del proyecto
+        const response = await fetch(`http://localhost:3001/projects/${projectId}`, {
           method: 'GET',
           headers: {
-            'auth': token,
+            'auth': token, // Enviar token en la cabecera
             'Content-Type': 'application/json',
           },
         });
-       
 
         if (!response.ok) {
           throw new Error('Error al obtener el proyecto');
         }
 
         const data = await response.json();
-        setProject(data.data);
+        setProject(data); // Guardar los detalles del proyecto en el estado
 
-        const epicsResponse = await fetch(`https://lamansysfaketaskmanagerapi.onrender.com/api/projects/${projectId}/epics`, {
+        // Petición para obtener las épicas del proyecto
+        const epicsResponse = await fetch(`http://localhost:3001/epics/project/${projectId}`, {
           method: 'GET',
           headers: {
-            'auth': token,
+            'auth': token, // Enviar token en la cabecera
             'Content-Type': 'application/json',
           },
         });
@@ -51,33 +52,34 @@ const ProjectDetail = () => {
         }
 
         const epicsData = await epicsResponse.json();
-        setEpics(epicsData.data);
+        setEpics(epicsData); // Guardar las épicas en el estado
       } catch (error) {
-        setError(error.message);
+        setError(error.message); // Manejo de errores
       } finally {
-        setLoading(false);
+        setLoading(false); // Finalizar el estado de carga
       }
     };
 
     fetchProjectDetails();
-  }, [projectId]);
+  }, [projectId]); // useEffect se ejecuta cada vez que cambia el projectId
 
   if (loading) {
-    return <p>Cargando detalles del proyecto y épicas...</p>;
+    return <p>Cargando detalles del proyecto y épicas...</p>; // Mientras se cargan los datos, mostrar mensaje
   }
 
   if (error) {
-    return <p style={{ color: 'red' }}>Error: {error}</p>;
+    return <p style={{ color: 'red' }}>Error: {error}</p>; // Si hay error, mostrar mensaje de error
   }
 
   if (!project) {
-    return <p>No se encontraron detalles del proyecto.</p>;
+    return <p>No se encontraron detalles del proyecto.</p>; // Si no se encontró el proyecto
   }
 
   return (
     <div className="project-detail-container">
-    <Header title={project.name} />
-    <h1>.</h1>
+      <Header title={project.name} />
+      <h1>"-----------------------------"</h1>
+      <Link to="/my-projects" className="back-button">← Volver a My Projects</Link> 
       <p className="project-detail-description">{project.description}</p>
 
       <h2>Épicas del Proyecto</h2>
@@ -91,7 +93,7 @@ const ProjectDetail = () => {
             </Link>
           ))
         ) : (
-          <p>No hay épicas en este proyecto.</p>
+          <p>No hay épicas en este proyecto.</p> // Si no hay épicas, mostrar mensaje correspondiente
         )}
       </div>
     </div>

@@ -1,122 +1,112 @@
-/* Colores */
+/* Variables de color */
 :root {
-    --primary-color: #1a3d5d; /* Azul marino */
-    --secondary-color: #ffffff; /* Blanco */
-    --accent-color: #4a90e2; /* Azul más claro para detalles */
-    --error-color: #e74c3c; /* Rojo para el botón de cerrar sesión */
-  }
-  
-  .settings-page {
-    max-width: 650px;
-    margin: 0 auto;
-    padding: 30px;
-    background-color: var(--secondary-color);
-    border-radius: 12px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    font-family: 'Arial', sans-serif;
-    color: var(--primary-color);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-  
-  .settings-page:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.25);
-  }
-  
-  .settings-page h2 {
-    font-size: 28px;
-    margin-bottom: 25px;
-    text-align: center;
-    color: var(--primary-color);
-    font-weight: bold;
-  }
-  
+  --primary-color: #1a3d5d; /* Azul marino */
+  --secondary-color: #ffffff; /* Blanco */
+  --accent-color: #4a90e2; /* Azul claro */
+  --error-color: #e74c3c; /* Rojo */
+  --gray-color: #f4f4f4; /* Gris claro */
+}
+
+/* Estilos generales de la página de configuración */
+.settings-page {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--gray-color);
+  min-height: 100vh;
+}
+
+.settings-page h1 {
+  margin-top: 30px;
+  font-size: 32px;
+  color: var(--secondary-color); /* Cambié el color a blanco */
+}
+/* Sección de configuración */
+.settings-section {
+  width: 100%;
+  max-width: 600px;
+  padding: 20px;
+  margin-top: 20px;
+  background-color: var(--secondary-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.settings-section label {
+  display: block;
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: var(--primary-color);
+}
+
+.settings-section input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--primary-color);
+  border-radius: 6px;
+  font-size: 16px;
+  color: var(--primary-color);
+  background-color: var(--secondary-color);
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
+}
+
+.settings-section input:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
+}
+
+/* Botón de cerrar sesión */
+.settings-actions {
+  margin-top: 20px;
+  width: 100%;
+  max-width: 600px;
+  text-align: center;
+}
+
+.logout-btn {
+  padding: 12px 20px;
+  background-color: var(--error-color);
+  color: var(--secondary-color);
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.logout-btn:hover {
+  background-color: #c0392b;
+  transform: translateY(-2px);
+}
+
+/* Estilos responsive para pantallas pequeñas */
+@media (max-width: 600px) {
   .settings-section {
-    margin-bottom: 20px;
+    padding: 15px;
   }
-  
+
+  .settings-page h1 {
+    font-size: 26px;
+  }
+
   .settings-section label {
-    display: block;
-    font-size: 18px;
-    font-weight: bold;
-    color: var(--primary-color);
-    margin-bottom: 10px;
-    transition: color 0.3s ease;
+    font-size: 14px;
   }
-  
+
   .settings-section input {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid var(--primary-color);
-    border-radius: 6px;
-    font-size: 16px;
-    color: var(--primary-color);
-    background-color: var(--secondary-color);
-    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+    font-size: 14px;
   }
-  
-  .settings-section input:focus {
-    outline: none;
-    border-color: var(--accent-color);
-    box-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
-  }
-  
-  .settings-section button {
-    padding: 10px 15px;
-    font-size: 16px;
-    font-weight: bold;
-    color: var(--secondary-color);
-    background-color: var(--accent-color);
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-  }
-  
-  .settings-section button:hover {
-    background-color: var(--primary-color);
-    transform: translateY(-2px);
-  }
-  
-  .settings-section button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
-  
-  .settings-actions {
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  .save-btn {
-    background-color: var(--accent-color);
-  }
-  
+
   .logout-btn {
-    background-color: var(--error-color);
+    padding: 10px 16px;
+    font-size: 14px;
   }
-  
-  .logout-btn:hover {
-    background-color: #c0392b;
-  }
-  
-  @media (max-width: 600px) {
-    .settings-page {
-      padding: 20px;
-      max-width: 90%;
-    }
-  
-    .settings-page h2 {
-      font-size: 24px;
-    }
-  
-    .settings-section label, .settings-section input {
-      font-size: 14px;
-    }
-  
-    .settings-section button {
-      padding: 8px 12px;
-      font-size: 14px;
-    }
-  }
-  
+}

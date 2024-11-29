@@ -1,5 +1,4 @@
-/* src/components/ProjectDetail.css */
-
+/* Estilos del contenedor del detalle del proyecto */
 .project-detail-container {
   padding: 40px;
   background-color: #f9f9f9;
@@ -10,55 +9,46 @@
   font-family: 'Roboto', sans-serif;
 }
 
+/* Estilo del botón para volver a My Projects */
+.back-button {
+  display: inline-block;
+  background-color: #007bff; /* Fondo azul */
+  color: white;
+  padding: 12px 20px;
+  font-size: 16px;
+  border-radius: 6px;
+  text-decoration: none; /* Eliminar subrayado */
+  margin-top: 20px;
+  margin-bottom: 20px;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+/* Efecto al pasar el ratón sobre el botón */
+.back-button:hover {
+  background-color: #0056b3; /* Azul más oscuro */
+  transform: translateY(-2px); /* Elevar ligeramente al pasar el ratón */
+}
+
 /* Lista de épicas */
 .epic-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Usar columnas flexibles */
-  gap: 20px; /* Espacio entre los elementos */
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
   margin-top: 20px;
 }
 
 /* Elemento de épica */
 .epic-item {
-  background-color: #ffffff; /* Fondo blanco */
+  background-color: #ffffff;
   border-radius: 12px;
   padding: 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Sombra suave */
-  transition: transform 0.2s, box-shadow 0.2s; /* Transiciones para hover */
-  cursor: pointer; /* Cambiar el cursor al pasar por encima */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
 }
 
-/* Efecto al pasar el ratón */
+/* Hover en los elementos de épicas */
 .epic-item:hover {
-  transform: translateY(-2px); /* Elevar ligeramente al pasar el ratón */
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2); /* Sombra más pronunciada en hover */
-}
-
-/* Título de cada épica */
-.epic-item h3 {
-  margin: 0 0 10px;
-  color: #007bff; /* Color azul */
-  font-weight: 700;
-  font-size: 22px; /* Aumentar tamaño de fuente para el título */
-}
-
-/* Descripción de cada épica */
-.epic-item p {
-  margin: 5px 0;
-  color: #666; /* Color gris */
-  line-height: 1.6;
-  font-size: 16px; /* Ajustar tamaño de fuente para la descripción */
-}
-
-/* Agregar un borde superior a la épica (opcional) */
-.epic-item::before {
-  content: '';
-  display: block;
-  width: 5px; /* Ancho del borde */
-  height: 50px; /* Altura del borde */
-  background-color: #007bff; /* Color del borde */
-  border-radius: 12px 0 0 12px; /* Bordes redondeados */
-  position: absolute; /* Posicionarlo a la izquierda */
-  top: 20px; /* Ajustar posición vertical */
-  left: 10px; /* Ajustar posición horizontal */
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
 }
