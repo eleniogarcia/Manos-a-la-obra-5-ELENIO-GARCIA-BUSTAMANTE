@@ -2,7 +2,6 @@ import React from 'react'; // Importa React para usar componentes funcionales.
 import './css/Loader.css'; // Importa los estilos asociados al loader.
 
 const Loader = () => {
-  // Declara el componente Loader como una función.
   // Este componente no recibe props, ya que simplemente muestra un indicador de carga.
 
   return (

@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Header from '../organism/Header';
 import ProjectList from '../molecules/ProjectList';
 import Loader from '../atoms/Loader';
-import './css/MyProjects.css';
+import './css/MyProjects.scss';
+import '../organism/css/Header.css'; // Estilos particulares para el encabezado
 import { useNavigate } from 'react-router-dom';
 
 const MyProjects = () => {
@@ -15,16 +16,19 @@ const MyProjects = () => {
   useEffect(() => {
     const fetchProjects = async () => {
       const token = localStorage.getItem('token');
+      const userID = localStorage.getItem('userID');  // Obtienes el userID del localStorage
+      
       console.log('Token obtenido:', token);
+      console.log('User ID:', userID);
   
-      if (!token) {
-        setError('No estás autenticado. Por favor inicia sesión.');
+      if (!token || !userID) {
+        setError('No estás autenticado o no se encontró el userID.');
         setLoading(false);
         return;
       }
   
       try {
-        const response = await fetch('http://localhost:3001/projects', {
+        const response = await fetch(`http://localhost:3001/projects/user/${userID}`, {
           method: 'GET',
           headers: {
             'auth': token,
@@ -40,12 +44,11 @@ const MyProjects = () => {
   
         const data = await response.json();
   
-        // Log de los datos obtenidos
         console.log('Datos de proyectos:', data);
   
-        // Verificar si los datos son correctos antes de actualizar el estado
-        if (data) {
-          setProjects(data);
+        // Aquí extraemos los proyectos correctamente
+        if (data.status === 'success') {
+          setProjects(data.data); // Accedemos a la propiedad `data` que contiene los proyectos
         } else {
           setError('No se encontraron proyectos.');
         }
@@ -53,12 +56,13 @@ const MyProjects = () => {
         console.error('Error al obtener los proyectos:', error);
         setError('Hubo un problema al obtener los proyectos.');
       } finally {
-        setLoading(false);////Una vez que los datos han sido obtenidos (o en caso de error), loading se establece en false para ocultar el loader:
+        setLoading(false);
       }
     };
   
     fetchProjects();
   }, []);
+  
 
   const handleProjectClick = (projectId) => {
     navigate(`/my-projects/${projectId}`);
@@ -73,7 +77,8 @@ const MyProjects = () => {
         ) : error ? (
           <p style={{ color: 'red' }}>{error}</p>  // Muestra el error si lo hay
         ) : (
-          <ProjectList projects={projects} onClickProject={handleProjectClick} />
+
+          < ProjectList projects={projects} onClickProject={handleProjectClick} />
         )}
       </div>
     );

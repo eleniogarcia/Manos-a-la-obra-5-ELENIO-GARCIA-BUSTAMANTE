@@ -1,0 +1,57 @@
+@use '../../../styles/base/variables.scss' as *;
+@use '../../../styles/base/mixins.scss' as *;
+// Estilo para la página de historias
+.my-stories-page {
+  max-width: 800px; // Ancho máximo de la página
+  margin: 0 auto; // Centra el contenido
+  padding: 20px;
+  background-color: $background-secondary; // Fondo claro
+  font-family: $font-family; // Familia de fuente global
+}
+
+// Contenedor de las historias
+.story-container {
+  display: flex;
+  flex-direction: column; // Historias apiladas verticalmente
+  gap: 20px; // Espacio entre los cuadros
+}
+
+// Estilo para cada historia
+.story-item {
+  background-color: $primary-dark; // Fondo azul marino
+  border: 1px solid $primary-darker; // Borde azul oscuro
+  border-radius: $border-radius; // Bordes redondeados
+  padding: 20px; // Espaciado interno
+  box-shadow: $box-shadow; // Sombra ligera
+  @include transition(transform 0.3s ease, box-shadow 0.3s ease); // Transición suave
+  color: $text-light; // Texto blanco
+  font-size: 18px; // Tamaño de fuente
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-5px); // Efecto de elevación
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); // Sombra más intensa
+  }
+}
+
+// Estilo para el título de cada historia
+.story-item h3 {
+  margin: 0 0 10px;
+  color: $text-white; // Texto blanco
+  font-size: 24px; // Tamaño de letra más grande para el título
+  font-weight: bold;
+}
+
+// Estilo para la descripción de cada historia
+.story-item p {
+  margin: 0;
+  color: $text-muted; // Texto gris claro
+  font-size: 16px;
+}
+
+// Ajustes adicionales para detalles de la historia
+.story-details-page {
+  border-radius: $border-radius;
+  box-shadow: $box-shadow;
+  background-color: $background-light; // Fondo claro
+}

@@ -18,7 +18,7 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
         <img src={logo2} alt="App Logo" className="app-logo" />
         {/* Muestra el logo de la aplicación. */}
         <nav>
-          <ul>
+          <ul className="sidebar-menu"  >
             <li><a href="/home">Inicio</a></li>
             <li><a href="/my-projects">Proyectos</a></li>
             <li><a href="/my-stories">Historias</a></li>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom'; // Hooks para obtener parámetros de la URL y generar enlaces
 import Header from '../organism/Header'; // Componente reutilizable para el encabezado
 import Loader from '../atoms/Loader'; // Indicador de carga
-import './css/EpicDetailUpdate.css'; // Estilos específicos del componente
+import './css/EpicDetailUpdate.scss'; // Estilos específicos del componente
 
 const EpicDetail = () => {
   // Extrae projectId y epicId de la URL

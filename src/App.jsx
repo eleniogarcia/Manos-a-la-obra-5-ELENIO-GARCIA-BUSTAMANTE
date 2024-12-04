@@ -1,6 +1,5 @@
 import React, { useState } from 'react'; 
 import { Route, Routes, Navigate } from "react-router-dom";
-import Header from './components/organism/Header'; // Header principal
 import Sidebar from './components/molecules/Sidebar'; // Sidebar de navegación
 import Home from './components/pages/Home'; // Página de inicio
 import MyProjects from './components/pages/MyProjects'; // Lista de proyectos

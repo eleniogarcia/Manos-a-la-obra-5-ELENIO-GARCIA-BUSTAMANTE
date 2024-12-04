@@ -17,7 +17,7 @@
   .header-title {
     font-size: 22px; /* Ajusta el tamaño de fuente según sea necesario */
     margin: 0; /* Evita que no haya margen */
-    color: #fff;
+    color: #fff  !important;
     flex-grow: 1; /* Asegura que el título use espacio adicional */
     text-align: center; /* Centra el texto en el header */
     overflow: hidden; /* Evita que el texto se desborde */

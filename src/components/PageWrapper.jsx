@@ -7,7 +7,7 @@ const PageWrapper = ({ children, setTitle, projectName }) => {
   useEffect(() => {
     // Cambia el título de la página según la ruta
     let title;
-    switch (location.pathname) {
+    switch (location.pathname) {//El pathname contiene solo la parte del URL que representa la ruta después del dominio
       case '/home':
         title = "HOME";
         break;

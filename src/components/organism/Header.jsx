@@ -1,7 +1,7 @@
 import React, { useState } from 'react'; // Importa React y el hook `useState` para manejar estado.
-import MenuIcon from '../atoms/MenuIcon'; // Importa el componente atómico `MenuIcon`.
-import Sidebar from '../molecules/Sidebar'; // Importa el componente molecular `Sidebar`.
-import './css/Header.css'; // Importa los estilos asociados al encabezado.
+import MenuIcon from '../atoms/MenuIcon'; 
+import Sidebar from '../molecules/Sidebar';
+import './css/Header.css'; 
 
 const Header = ({ title }) => {
   // Declara el componente `Header` que recibe una prop:

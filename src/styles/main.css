@@ -1,0 +1,17 @@
+/* Error: Expected '.
+ *   ,
+ * 7 | @import '../components/pages/css/MyProjects.css;
+ *   |                                                 ^
+ *   '
+ *   src\styles\main.scss 7:49  root stylesheet */
+
+body::before {
+  font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",
+      "Droid Sans Mono", monospace, monospace;
+  white-space: pre;
+  display: block;
+  padding: 1em;
+  margin-bottom: 1em;
+  border-bottom: 2px solid black;
+  content: "Error: Expected '.\a   \2577 \a 7 \2502  @import '../components/pages/css/MyProjects.css;\d\a   \2502                                                  ^\a   \2575 \a   src\\styles\\main.scss 7:49  root stylesheet";
+}

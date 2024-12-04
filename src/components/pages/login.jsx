@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Hook de navegación para redirigir después del login
 import Header from '../organism/Header'; // Componente Header
 import './css/login.css'; // Estilos específicos para la página de login
-
+import '../organism/css/Header.css'; // Estilos particulares para el encabezado
 // Componente de Login
 export default function Login({ setIsAuthenticated }) {
   // Estado para almacenar los valores de usuario y contraseña, así como los errores de validación
@@ -12,8 +12,7 @@ export default function Login({ setIsAuthenticated }) {
   const [usernameError, setUsernameError] = useState(''); // Error específico para el campo de usuario
   const [passwordError, setPasswordError] = useState(''); // Error específico para el campo de contraseña
   const navigate = useNavigate(); // Hook para la navegación
-  const title = "Login Page"; // Define the title variable
-
+  
   // Función que maneja el envío del formulario
   const handleSubmit = async (e) => {
     e.preventDefault(); // Previene el comportamiento predeterminado del formulario (recargar la página)
@@ -69,6 +68,7 @@ export default function Login({ setIsAuthenticated }) {
         localStorage.setItem('token', result.data.token);
         setIsAuthenticated(true); // Cambia el estado de autenticación a verdadero
         localStorage.setItem('userID', result.data.user._id); // Guarda el ID del usuario
+        
         navigate('/my-projects'); // Redirige a la página de proyectos
       } else {
         setError('Usuario o contraseña incorrectos'); // Si la autenticación falla, muestra el error correspondiente

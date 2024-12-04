@@ -186,6 +186,8 @@ const StoryDetail = () => {
     <div className="story-details-page">
       <Header title={story.name} />
       <div className="add-task-form">
+      <h2>Descripción de la historia</h2>
+      <p>{story.description}</p>
       <h2>========================================================</h2>
           <h3>Agregar Tarea</h3>
           <input
@@ -212,7 +214,8 @@ const StoryDetail = () => {
           </button>
         </div>
       <div className="storyContainer">
-        <p>{story.description}</p>
+        
+        {notification && <p className="notification">{notification}</p>}
         <h2>Tareas</h2>
         {tasks.length === 0 ? (
           <p>No hay tareas para esta historia.</p>
@@ -230,7 +233,13 @@ const StoryDetail = () => {
                 </div>
                 <div className="task-details">
                   <p>{task.description}</p>
-                  <p>Fecha de vencimiento: {new Date(task.dueDate).toLocaleDateString()}</p>
+                  
+                  <p>
+                  Fecha de vencimiento:{" "}
+                  {task.dueDate
+                    ? new Date(task.dueDate).toLocaleDateString()
+                    : "Indefinida"} {/* Mostrar 'Indefinida' si no hay fecha */}
+                </p>
                 </div>
                 <div className="task-actions">
                   <button onClick={() => handleDeleteTask(task._id)} className="delete-btn">
@@ -242,7 +251,7 @@ const StoryDetail = () => {
           </ul>
         )}
         
-        {notification && <p className="notification">{notification}</p>}
+        
       </div>
     </div>
   );

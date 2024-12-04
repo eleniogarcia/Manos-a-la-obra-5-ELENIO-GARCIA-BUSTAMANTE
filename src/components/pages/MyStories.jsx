@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Header from '../organism/Header';
 import Loader from '../atoms/Loader';
-import './css/MyStories.css';
+import './css/MyStories.scss';
 
 const MyStories = () => {
   const [stories, setStories] = useState([]); // Estado para almacenar las historias
@@ -10,24 +10,25 @@ const MyStories = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('token'); // Obtener token de autenticación del localStorage
+    const userID = localStorage.getItem('userID'); // Obtener userID del localStorage
 
-    if (!token) { 
-      setError('No estás autenticado. Por favor inicia sesión.'); // Si no hay token, mostrar mensaje de error
+    if (!token || !userID) {
+      setError('No estás autenticado. Por favor inicia sesión.'); // Si no hay token o userID, mostrar mensaje de error
       setLoading(false);
       return;
     }
 
-    // Petición para obtener las historias del servidor la hago then para probar otra alternativa
-    fetch('http://localhost:3001/stories', {//Realiza la solicitud HTTP
+    // Petición para obtener las historias del servidor
+    fetch(`http://localhost:3001/stories/user/${userID}`, { // Corregí la interpolación de cadena aquí con backticks
       method: 'GET',
       headers: {
         auth: token, // Incluir token en el encabezado para autenticar la solicitud
         'Content-Type': 'application/json',
       },
     })
-       .then((response) => response.json()) // Convierte la respuesta en JSON
+      .then((response) => response.json()) // Convierte la respuesta en JSON
       .then((data) => {   // Una vez que el JSON está listo
-        setStories(data); // Guardar las historias en el estado
+        setStories(data.data); // Guardar las historias en el estado
       })
       .catch((error) => {
         setError(error.message); // Manejo de errores de la solicitud
@@ -39,8 +40,8 @@ const MyStories = () => {
 
   return (
     <div className="my-stories-page">
-      <Header title="Mis historias" />
-      <h1>Mis historias</h1>
+      <Header title="My Stories" />
+      <h1>My Stories</h1>
       {loading ? (
         <Loader /> // Mostrar el loader mientras se cargan las historias
       ) : error ? (

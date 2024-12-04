@@ -2,11 +2,7 @@ import React from 'react'; // Importa React para usar componentes funcionales.
 import './css/Input.css'; // Importa los estilos asociados al input.
 
 const Input = ({ type, placeholder, value, onChange }) => {
-  // Declara el componente Input como una función que recibe cuatro props:
-  // 1. `type`: especifica el tipo de input (texto, contraseña, email, etc.).
-  // 2. `placeholder`: texto que se muestra cuando el input está vacío.
-  // 3. `value`: valor actual del input.
-  // 4. `onChange`: función que se ejecuta cuando el usuario escribe en el input.
+  
 
   return (
     <input
